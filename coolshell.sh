@@ -19,20 +19,20 @@ function sh_wait()
 {
 	local input=$1
 	local filename=$2
-	local interval=10
+	local interval=2
+	local period=1
 	while true
 	do
-		set -x
-		grep "$input" $filename 2>&1 >/dev/null
+		grep "$input" $filename 2>/dev/null
 		ret=$?
 		if [ $ret -ne 0 ] ;then
 			sleep $interval
+			echo -e "\rWaiting $input occurs in $filename, check 1 minute later... [passed minutes: $period]\c"
+			period=`expr $period + 1`
 		else
-			echo "$input occurs in $filename"
+			echo -e "\n$input occurs in $filename"
 			return 0
 		fi
 	done
 }
-
-
 
